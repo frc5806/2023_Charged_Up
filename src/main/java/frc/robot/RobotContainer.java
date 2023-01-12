@@ -10,6 +10,7 @@ import frc.robot.commands.DrivetrainDrive;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,10 +34,11 @@ public class RobotContainer {
 
     // Set drive as default
     driveTrain.setDefaultCommand(
-      new DrivetrainDrive(
-          driveTrain,
-          () -> -joystick1.getRawAxis(0),
-          () -> -joystick1.getRawAxis(1)));
+      new RunCommand(
+              () ->
+              driveTrain.arcadeDrive(
+                    joystick1.getRawAxis(0), joystick1.getRawAxis(1), true),
+                      driveTrain));
   }
 
   /**
@@ -48,6 +50,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
       // new JoystickButton(joystick1, Button.kRightBumper.value)
       // .whileTrue(new HalveDriveSpeed(m_robotDrive));
+
+    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // cancelling on release.
+   // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
   }
 
   /** 
