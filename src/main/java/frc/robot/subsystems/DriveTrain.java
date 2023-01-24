@@ -128,6 +128,11 @@ public class DriveTrain extends SubsystemBase {
         return gyro.getAngle();
     }
 
+    public double getKinematics() {
+        // TODO: Update
+        return 0;
+    }
+
     @Override
     public void periodic() {
         odometry.update(

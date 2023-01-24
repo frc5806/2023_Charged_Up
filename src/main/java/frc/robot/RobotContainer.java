@@ -4,10 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.commands.DrivetrainDrive;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -21,16 +25,22 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveTrain driveTrain = new DriveTrain();
+  private final Intake intake = new Intake();
+  private NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("NetworkTable");
+
+  private LED led = new LED(8, 88);
   
 
  // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   private Joystick joystick1 = new Joystick(Constants.kDriverControllerPort);
   private Joystick joystick2 = new Joystick(Constants.kDriverControllerPort2);
+  JoystickButton button1 = new JoystickButton(joystick1, 2);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    configureButtonBindings();
+   // configureButtonBindings();
 
     // Set drive as default
     driveTrain.setDefaultCommand(
@@ -41,6 +51,8 @@ public class RobotContainer {
                       driveTrain));
   }
 
+  
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -48,14 +60,18 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      // new JoystickButton(joystick1, Button.kRightBumper.value)
-      // .whileTrue(new HalveDriveSpeed(m_robotDrive));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-   // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    button1.onTrue(intake.runIntake(0.1));
   }
 
+  public void showTelemetry() {
+    SmartDashboard.putNumber("Gyro orientation", driveTrain.getAngle());
+  }
+
+  public void runLED() {
+    led.run();
+    led.changeMode();
+
+  }
   /** 
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

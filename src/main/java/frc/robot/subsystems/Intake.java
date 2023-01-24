@@ -4,6 +4,8 @@ import frc.robot.Constants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -12,6 +14,13 @@ public class Intake extends SubsystemBase {
         intakeMotor = new CANSparkMax(Constants.kIntakeMotorPort, MotorType.kBrushless);
     }
 
+    public Command runIntake(double pwr) {
+        return this.startEnd(() -> this.set(pwr), () -> this.set(0.0));
+    }
+
+    public void set(double pwr ) {
+        intakeMotor.set(pwr);
+    }
     @Override
     public void periodic() {
         // pass for now

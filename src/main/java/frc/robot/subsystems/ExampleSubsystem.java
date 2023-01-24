@@ -26,7 +26,7 @@ public class ExampleSubsystem extends SubsystemBase {
   }
 
   /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
+   * An example method querying a boolean state of the subsystem (for example, a digital sensor).Pa
    *
    * @return value of some boolean subsystem state, such as a digital sensor.
    */
