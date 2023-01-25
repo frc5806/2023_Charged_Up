@@ -17,21 +17,24 @@ import edu.wpi.first.wpilibj.I2C.Port;
  */
 public final class Constants {
     // TODO: Update all constants + find new later
-    public static final int kLeftMotor1Port = 1;
-    public static final int kLeftMotor2Port = 2;
-    public static final int kLeftMotor3Port = 3;
+    //public final DriveConstants {
+        public static final int kLeftMotor1Port = 1;
+        public static final int kLeftMotor2Port = 2;
+        public static final int kLeftMotor3Port = 3;
 
-    public static final int kRightMotor1Port = 5;
-    public static final int kRightMotor2Port = 6;
-    public static final int kRightMotor3Port = 7;
+        public static final int kRightMotor1Port = 5;
+        public static final int kRightMotor2Port = 6;
+        public static final int kRightMotor3Port = 7;
+
+        public static final int[] kLeftEncoderPorts = new int[] {0, 1};
+        public static final int[] kRightEncoderPorts = new int[] {2, 3};
+        public static final boolean kLeftEncoderReversed = false;
+        public static final boolean kRightEncoderReversed = true;
+    //}
+
+    public static final int ledPort = 8;
 
     public static final int kIntakeMotorPort = 0;
-
-    public static final int[] kLeftEncoderPorts = new int[] {0, 1};
-    public static final int[] kRightEncoderPorts = new int[] {2, 3};
-    public static final boolean kLeftEncoderReversed = false;
-    public static final boolean kRightEncoderReversed = true;
-
     public static final int kDriverControllerPort = 0;
     public static final int kDriverControllerPort2 = 1;
 }

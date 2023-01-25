@@ -1,10 +1,12 @@
-package frc.robot;
+package frc.robot.subsystems;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
-
-public class LED {
+public class LED extends SubsystemBase {
     private AddressableLED m_led;
     private AddressableLEDBuffer m_ledBuffer;
     private double startTime;
@@ -14,9 +16,9 @@ public class LED {
     public int mode;
     public boolean inShot;
 
-    public LED(int port, int length){
+    public LED(){
         mode = 1;
-        m_led = new AddressableLED(port);
+        m_led = new AddressableLED(Constants.ledPort);
         m_ledBuffer = new AddressableLEDBuffer(length);
         m_led.setLength(m_ledBuffer.getLength());
         this.length = length;
@@ -302,5 +304,7 @@ public class LED {
      // Set the LEDs
         m_led.setData(m_ledBuffer);
     } // end of run()
+    
+
     
 }

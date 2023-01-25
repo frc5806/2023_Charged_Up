@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.*;
 import frc.robot.commands.DrivetrainDrive;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,7 +29,7 @@ public class RobotContainer {
   private final Intake intake = new Intake();
   private NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("NetworkTable");
 
-  private LED led = new LED(8, 88);
+  private LED led = new LED();
   
 
  // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
