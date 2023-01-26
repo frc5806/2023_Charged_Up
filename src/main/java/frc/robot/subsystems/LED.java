@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -19,9 +20,9 @@ public class LED extends SubsystemBase {
     public LED(){
         mode = 1;
         m_led = new AddressableLED(Constants.ledPort);
-        m_ledBuffer = new AddressableLEDBuffer(length);
-        m_led.setLength(m_ledBuffer.getLength());
-        this.length = length;
+        m_ledBuffer = new AddressableLEDBuffer(85);
+        m_led.setLength(Constants.ledLength);
+        this.length = Constants.ledLength;
 
     // Set the data
         m_led.setData(m_ledBuffer);
@@ -29,9 +30,11 @@ public class LED extends SubsystemBase {
         // Timer
         startTimeSet();  
         // Set all LED's to white
-        for (int i = 0; i < m_ledBuffer.getLength(); i++){
+        for (int i = 0; i < m_ledBuffer.getLength() - 1; i++){
             m_ledBuffer.setRGB(i, 255, 255,255);
         }
+
+        timer = new Timer();
     }
 
     private void rainbow() {
@@ -39,14 +42,15 @@ public class LED extends SubsystemBase {
         updateTime();
         int m_rainbowFirstPixelHue = 150;
     
-        for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+        for (var i = 0; i < 85; i++) {
           // Calculate the hue - hue is easier for rainbows because the color
           // shape is a circle so only one value needs to precess
           final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+          System.out.println(hue);
           // Set the value
           if (i < time*20){
             m_ledBuffer.setHSV(i, hue, 255, 120);
-            m_ledBuffer.setHSV(length/2-i, hue, 255, 120);
+            m_ledBuffer.setHSV((length-i), hue, 255, 120);
             
         }
           
@@ -75,7 +79,7 @@ public class LED extends SubsystemBase {
 
     
     
-    private void maroon(){
+    public void maroon(){
         updateTime();
 
         for (int i = 0; i < length/2; i++){
@@ -304,7 +308,15 @@ public class LED extends SubsystemBase {
      // Set the LEDs
         m_led.setData(m_ledBuffer);
     } // end of run()
+
+    public Command rainbowLED() {
+        return this.run(() -> this.rainbow());
+    }
     
+    public Command maroonLED() {
+        return this.run(() -> this.maroon());
+    }
+
 
     
 }
