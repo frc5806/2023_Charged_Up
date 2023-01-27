@@ -16,8 +16,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
 public class DriveTrain extends SubsystemBase {
     private final CANSparkMax[] leftMotors;
     private final CANSparkMax[] rightMotors;

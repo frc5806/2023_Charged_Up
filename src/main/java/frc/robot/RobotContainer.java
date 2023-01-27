@@ -19,8 +19,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -32,34 +30,26 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  // Subsystems
   private final DriveTrain driveTrain = new DriveTrain();
   private final Intake intake = new Intake();
-  private NetworkTable networkTable = NetworkTableInstance.getDefault().getTable("NetworkTable");
 
+  private final Limelight limelight = new Limelight();
   private LED led = new LED();
+
+  // Commands
   
-
- // private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
-
+  // Controllers
   private Joystick joystick1 = new Joystick(Constants.kDriverControllerPort);
   private Joystick joystick2 = new Joystick(Constants.kDriverControllerPort2);
   JoystickButton button1 = new JoystickButton(joystick1, 2);
   JoystickButton button2 = new JoystickButton(joystick1, 3);
 
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     configureButtonBindings();
 
-    // Set drive as default
     driveTrain.setDefaultCommand(
       new RunCommand(
               () ->
@@ -82,7 +72,15 @@ public class RobotContainer {
   }
 
   public void showTelemetry() {
+    // Gyro
     SmartDashboard.putNumber("Gyro orientation", driveTrain.getAngle());
+    SmartDashboard.putNumber("Gyro", driveTrain.getTurnRate());
+
+    // Limelight
+    limelight.update();
+    SmartDashboard.putNumber("Limelight X", limelight.getX());
+    SmartDashboard.putNumber("Limelight Y", limelight.getX());
+    SmartDashboard.putNumber("Limelight Area", limelight.getX());
   }
 
   public void runLED() {
