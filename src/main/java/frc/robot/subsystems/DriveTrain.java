@@ -4,15 +4,25 @@ import frc.robot.Constants.DriveConstants;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Encoder;
 
 import com.kauailabs.navx.frc.AHRS;
-
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPRamseteCommand;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -26,7 +36,11 @@ public class DriveTrain extends SubsystemBase {
     private final Encoder rightEncoder;
     private final Encoder leftEncoder;
 
+    private final boolean isFirstPath = true;
+
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    DifferentialDriveKinematics kinematics;
+    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(2.0, 0, 1.0);
 
     int P, I, D = 1;
     int integral, previous_error, setpoint = 0;
@@ -50,6 +64,8 @@ public class DriveTrain extends SubsystemBase {
             new MotorControllerGroup(rightMotors),
             new MotorControllerGroup(leftMotors));
 
+        motorConfig();
+
         rightEncoder = new Encoder(DriveConstants.kRightEncoderPorts[0], DriveConstants.kRightEncoderPorts[1]); 
         leftEncoder = new Encoder(DriveConstants.kLeftEncoderPorts[0], DriveConstants.kLeftEncoderPorts[1]);
 
@@ -57,6 +73,8 @@ public class DriveTrain extends SubsystemBase {
         rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
 
         resetEncoders();
+
+        kinematics = new DifferentialDriveKinematics(DriveConstants.kTrackwidthMeters);
 
         // fix left and right distance
         odometry = new DifferentialDriveOdometry(gyro.getRotation2d(), 0, 0);
@@ -175,10 +193,18 @@ public class DriveTrain extends SubsystemBase {
         drivetrain.setMaxOutput(max);
     }
 
+     public double outtakeVolts(){
+         return 0;
+     }
+
     public Pose2d getPose(){
         return odometry.getPoseMeters();
     }
 
+
+    // public Command followTrajectoryCommand(PathWeaverTrajectory traj, boolean isFirstPath) {
+
+    // }
 
     @Override
     public void periodic() {

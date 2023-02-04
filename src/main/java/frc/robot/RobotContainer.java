@@ -7,7 +7,14 @@ package frc.robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.AutoConstants;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.RamseteAutoBuilder;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -19,6 +26,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.GenericHID;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -27,6 +36,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
@@ -38,6 +48,7 @@ public class RobotContainer {
   private final Limelight limelight = new Limelight();
   private LED led = new LED();
 
+  private final NetworkTable networkTable =  NetworkTableInstance.getDefault().getTable("limelight");
   // Commands
   
   // Controllers
@@ -54,7 +65,7 @@ public class RobotContainer {
       new RunCommand(
               () ->
               driveTrain.arcadeDrive(
-                    joystick1.getRawAxis(0), joystick1.getRawAxis(1), true),
+                    joystick1.getRawAxis(1), joystick1.getRawAxis(0), true),
                       driveTrain));
   }
 
