@@ -23,7 +23,10 @@ import edu.wpi.first.wpilibj.Encoder;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPRamseteCommand;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class DriveTrain extends SubsystemBase {
@@ -33,8 +36,8 @@ public class DriveTrain extends SubsystemBase {
     private final DifferentialDrive drivetrain;
     private final DifferentialDriveOdometry odometry;
 
-    private final Encoder rightEncoder;
-    private final Encoder leftEncoder;
+    private final RelativeEncoder rightEncoder;
+    private final RelativeEncoder leftEncoder;
 
     private final boolean isFirstPath = true;
 
@@ -66,13 +69,11 @@ public class DriveTrain extends SubsystemBase {
 
         motorConfig();
 
-        rightEncoder = new Encoder(DriveConstants.kRightEncoderPorts[0], DriveConstants.kRightEncoderPorts[1]); 
-        leftEncoder = new Encoder(DriveConstants.kLeftEncoderPorts[0], DriveConstants.kLeftEncoderPorts[1]);
+       // rightEncoder = rightMotors[0].getAbsoluteEncoder(kDutyCycle);
+      //  leftEncoder = leftMotors[0].getAbsoluteEncoder(null);
 
-        leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
-        rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
-
-        resetEncoders();
+        rightEncoder = rightMotors[0].getEncoder();
+        leftEncoder = leftMotors[0].getEncoder();
 
         kinematics = new DifferentialDriveKinematics(DriveConstants.kTrackwidthMeters);
 
@@ -121,30 +122,30 @@ public class DriveTrain extends SubsystemBase {
 // Encoder
 
     public double getLeftDistance() {
-        return leftEncoder.getDistance();
+        return leftEncoder.getPosition();
     }
 
     public double getRightDistance() {
-        return rightEncoder.getDistance();
+        return rightEncoder.getPosition();
     }
 
     public double getDistance() {
         return (getLeftDistance() + getRightDistance())/2;
     }
 
-    public void resetEncoders() {
-        leftEncoder.reset();
-        rightEncoder.reset();
-    }
+    // public void resetEncoders() {
+    //     leftEncoder.reset();
+    //     rightEncoder.getInverted()
+    // }
 
     public void resetOdometry(Pose2d pose) {
-        resetEncoders();
+      //  resetEncoders();
         odometry.resetPosition(
-            gyro.getRotation2d(), leftEncoder.getDistance(), rightEncoder.getDistance(), pose);
+            gyro.getRotation2d(), getLeftDistance(), getRightDistance(), pose);
       }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(leftEncoder.getRate(), rightEncoder.getRate());
+        return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
       }
 
     public void tankDriveVolts(double leftVolts, double rightVolts) {
@@ -160,11 +161,11 @@ public class DriveTrain extends SubsystemBase {
     // Velocity
 
     public double getLeftVelocity() {
-        return leftEncoder.getRate();
+        return leftEncoder.getVelocity();
     }
 
     public double getRightVelocity() {
-        return rightEncoder.getRate();
+        return rightEncoder.getVelocity();
     }
 
     public double getVelocity() {

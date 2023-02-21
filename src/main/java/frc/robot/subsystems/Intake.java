@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -9,10 +9,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
-    private final CANSparkMax intakeMotor;
+    private final CANSparkMax intakeMotor1;
+    private final CANSparkMax intakeMotor2;
+    private final CANSparkMax intakeMotor3;
+    private final CANSparkMax intakeMotor4;
     
     public Intake() {
-        intakeMotor = new CANSparkMax(Constants.kIntakeMotorPort, MotorType.kBrushless);
+        intakeMotor1 = new CANSparkMax(IntakeConstants.kIntakeMotorPort1, MotorType.kBrushless);
+        intakeMotor2 = new CANSparkMax(IntakeConstants.kIntakeMotorPort2, MotorType.kBrushless);
+        intakeMotor3 = new CANSparkMax(IntakeConstants.kIntakeMotorPort3, MotorType.kBrushless);
+        intakeMotor4 = new CANSparkMax(IntakeConstants.kIntakeMotorPort4, MotorType.kBrushless);
     }
 
     public Command runIntake(double pwr) {
@@ -20,7 +26,11 @@ public class Intake extends SubsystemBase {
     }
 
     public void set(double pwr ) {
-        intakeMotor.set(pwr);
+        intakeMotor1.set(pwr);
+        intakeMotor2.set(pwr);
+
+        intakeMotor3.set(pwr);
+        intakeMotor4.set(pwr);
     }
     @Override
     public void periodic() {
