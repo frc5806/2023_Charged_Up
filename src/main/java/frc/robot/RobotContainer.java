@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.ClawPos;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.Constants.AutoConstants;
 
@@ -41,19 +42,17 @@ public class RobotContainer {
   // Subsystems
   private final DriveTrain driveTrain = new DriveTrain();
   private final Intake intake = new Intake();
+  private final Claw claw = new Claw();
 
   private final Limelight limelight = new Limelight();
   private LED led = new LED();
 
   private final NetworkTable networkTable =  NetworkTableInstance.getDefault().getTable("limelight");
   // Commands
-  private final TurnToAngle turnToAngle = new TurnToAngle(10, driveTrain);
   
   // Controllers
   private Joystick joystick1 = new Joystick(Constants.kDriverControllerPort);
-  private Joystick joystick2 = new Joystick(Constants.kDriverControllerPort2);
-  JoystickButton button1 = new JoystickButton(joystick1, 1);
-  JoystickButton button2 = new JoystickButton(joystick1, 2);
+  private Joystick buttonBoard = new Joystick(Constants.kDriverControllerPort2);
 
   public RobotContainer() {
     configureButtonBindings();
@@ -67,9 +66,10 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    button1.whileTrue(intake.runIntake(0.5));
-    button2.onTrue(turnToAngle);
-  //  button2.onTrue(led.maroonLED());
+    new JoystickButton(buttonBoard, 1).whileTrue(intake.runIntake(0.5));
+    new JoystickButton(buttonBoard, 2).onTrue(new TurnToAngle(10, driveTrain));
+    new JoystickButton(buttonBoard, 3).onTrue(new ClawPos(-0.5, claw));
+    new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.5, claw));
   }
 
   public void showTelemetry() {
@@ -81,11 +81,16 @@ public class RobotContainer {
     SmartDashboard.putNumber("Encoder Left value", driveTrain.getLeftDistance());
     SmartDashboard.putNumber("Encoder Right value", driveTrain.getRightDistance());
 
+    SmartDashboard.putNumber("Encoder value Claw", claw.getEncoderPosition());
     // Limelight
     limelight.update();
     SmartDashboard.putNumber("Limelight X", limelight.getX());
     SmartDashboard.putNumber("Limelight Y", limelight.getX());
     SmartDashboard.putNumber("Limelight Area", limelight.getX());
+
+    // Double tagID = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDoubleArray(new double[6]);
+    // System.out.println();
+    // System.out.println("print");
   }
 
   public void runLED() {

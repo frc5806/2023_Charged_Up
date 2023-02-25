@@ -79,6 +79,10 @@ public final class Constants {
         public static final int kIntakeMotorPort4 = 11;
     }
 
+    public static final class ClawConstants {
+        public static final int kClawMotorPort = 4;
+    }
+
     public static final int kDriverControllerPort = 0;
     public static final int kDriverControllerPort2 = 1;
 }
