@@ -79,10 +79,7 @@ public class RobotContainer {
 
     SmartDashboard.putNumber("Encoder value Claw", claw.getEncoderPosition());
     // Limelight
-    limelight.update();
-    SmartDashboard.putNumber("Limelight X", limelight.getX());
-    SmartDashboard.putNumber("Limelight Y", limelight.getX());
-    SmartDashboard.putNumber("Limelight Area", limelight.getX());
+
 
     SmartDashboard.putNumber("Ultrasonic Distance", driveTrain.getUltrasonicDistance());
     SmartDashboard.putNumber("Ultrasonic Distance 1", driveTrain.getUltrasonicDistance1());

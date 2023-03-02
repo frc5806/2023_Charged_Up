@@ -8,7 +8,7 @@ public class ClawPos extends PIDCommand {
     
     public ClawPos(double pos, Claw claw) {
         super(
-            new PIDController(0.7, 0.2, 0),
+            new PIDController(1, 0.2, 0),
             // Close loop on encoder position
             claw::getEncoderPosition,
             // Set reference to target
