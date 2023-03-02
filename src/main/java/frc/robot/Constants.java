@@ -34,7 +34,7 @@ public final class Constants {
         public static final boolean kLeftEncoderReversed = false;
         public static final boolean kRightEncoderReversed = true;
 
-        public static final double kTurnP = 1;
+        public static final double kTurnP = 3.1827E-07;
         public static final double kTurnI = 0;
         public static final double kTurnD = 0;
 
@@ -52,11 +52,15 @@ public final class Constants {
                 // Assumes the encoders are directly mounted on the wheel shafts
                 (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
 
-        public static final double ksVolts = 0.22;
-        public static final double kvVoltSecondsPerMeter = 1.98;
-        public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+        public static final double ksVolts = 0.11858;
+        public static final double kvVoltSecondsPerMeter = 1.339;
+        public static final double kaVoltSecondsSquaredPerMeter = 0.20898;
 
         public static final double kPDriveVel = 8.5;
+
+        // Ultrasonic sensor
+        public static final int kUltrasonicPort = 0;
+        public static final int kUltrasonicPort1 = 1;
     }
 
     public static final class AutoConstants {
