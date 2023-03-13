@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Robot extends TimedRobot {
   private Command autonomousCommand;
@@ -63,6 +66,14 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     robotContainer.showTelemetry();
     robotContainer.runLED();
+
+    // System.out.println("iu3fwe");
+    // double[] id = NetworkTableInstance.getDefault().getTable("limelight").getEntry("botpose").getDoubleArray(new double[6]);
+    // for (int i = 0; i<id.length; i++ ) {
+    //   System.out.println("i value: " + Integer.toString(i) + ". Value:  " + id[i]);
+    // }
+
+  
   }
 
   @Override

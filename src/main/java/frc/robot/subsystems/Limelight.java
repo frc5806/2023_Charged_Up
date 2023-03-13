@@ -105,4 +105,13 @@ public class Limelight extends SubsystemBase {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
     }
 
+    public void turnToApril(NetworkTable networkTable) {
+
+        
+
+    }
+
+
+
+
 } 
