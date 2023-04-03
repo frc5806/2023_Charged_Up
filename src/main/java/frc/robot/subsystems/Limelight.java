@@ -104,7 +104,7 @@ public class Limelight extends SubsystemBase {
             final DifferentialDrivePoseEstimator poseEstimator =
                 new DifferentialDrivePoseEstimator(
                     DriveConstants.kDriveKinematics, 
-                    driveTrain.getAngle(), 
+                    driveTrain.geRotation2d(), 
                     driveTrain.getLeftDistance(), 
                     driveTrain.getRightDistance(), 
                     new Pose2d(),
@@ -112,7 +112,7 @@ public class Limelight extends SubsystemBase {
                     VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
 
 
-            poseEstimator.update(driveTrain.getAngle(), driveTrain.getLeftDistance(), driveTrain.getRightDistance());
+            poseEstimator.update(driveTrain.geRotation2d(), driveTrain.getLeftDistance(), driveTrain.getRightDistance());
 
         }
         
