@@ -1,3 +1,5 @@
+/* Class creates claw: Assigns claw motors and encoders, controls the powers, and resets/gets encoder position. */
+
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;

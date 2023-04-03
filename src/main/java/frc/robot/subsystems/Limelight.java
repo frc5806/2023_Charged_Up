@@ -1,5 +1,3 @@
-
-
 package frc.robot.subsystems;
 
 // package com.stuypulse.stuylib.network.limelight;
@@ -15,22 +13,85 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 
 public class Limelight extends SubsystemBase {
     
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
+    static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    static NetworkTableEntry tx = table.getEntry("tx");
+    static NetworkTableEntry ty = table.getEntry("ty");    
+    static NetworkTableEntry ta = table.getEntry("ta");
+    static NetworkTableEntry tv = table.getEntry("tv");
 
-    public double x;
-    public double y;
-    public double area;
+    public static double x;
+    public static double y;
+    public static double area;
+    public static boolean validTargets; 
+
+    public static class LimelightData {
+
+        /*---- Functions ----- */
+        public static void update() {
+            //read values periodically
+            x = tx.getDouble(0.0);
+            y = ty.getDouble(0.0);
+            area = ta.getDouble(0.0);
+            validTargets = tv.getBoolean(false);
+    
+        }
+
+        public static double getX() {
+            return x;
+        }
+    
+        public static double getY() {
+            return y;
+        }
+    
+        public static double getArea() {
+            return area;
+        }
+
+        public static boolean isValidTargets() {
+            return validTargets;
+        }
+
+
+        // Prints out on terminal x, y, z values from tables
+        public static void dataTest() {
+
+            LimelightData.update();
+            double[] dataXYA = new double[]{LimelightData.getX(), LimelightData.getY(), LimelightData.getArea()};
+
+            System.out.println("X: " + String.valueOf(dataXYA[0]) + ", Y: " + String.valueOf(dataXYA[1]) + ", Area: " + String.valueOf(dataXYA[2]));
+            System.out.println("ValidTargets: " + Boolean.valueOf(validTargets));
+        }
+
+    }
+
+    public static class LimelightMode {
+
+        public static void driverCamera() {
+            table.getEntry("camMode").setNumber(1);
+            table.getEntry("ledMode").setNumber(1);
+        }
+    
+        public static void retroCamera() {
+            table.getEntry("camMode").setNumber(0);
+            table.getEntry("ledMode").setNumber(3);
+        }
+
+        public static void setPipeline(int pipelineNum) {
+            table.getEntry("pipeline").setNumber(pipelineNum);
+        }
+    }
+
+
 
     /*--------------------- Calculating distance-------------------------- */
     double targetOffsetAngle_Vertical = ty.getDouble(0.0); // vertical offset
@@ -61,7 +122,6 @@ public class Limelight extends SubsystemBase {
     
     
     /*---- Aiming---- */
-
     public void steerSideways(DriveTrain drivespark) {
     
     
@@ -74,36 +134,7 @@ public class Limelight extends SubsystemBase {
         }
     }
 
-    /*---- Functions ----- */
-    public void update() {
-        //read values periodically
-        x = tx.getDouble(0.0);
-        y = ty.getDouble(0.0);
-        area = ta.getDouble(0.0);
-
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public double getArea() {
-        return area;
-    }
-
-    public void driverCamera() {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(1);
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
-    }
-
-    public void retroCamera() {
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
-        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(3);
-    }
+    
 
     public void turnToApril(NetworkTable networkTable) {
 

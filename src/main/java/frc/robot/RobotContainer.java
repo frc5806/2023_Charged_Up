@@ -10,7 +10,7 @@ import frc.robot.commands.Claw.*;
 import frc.robot.commands.DriveTrain.TurnToAngle;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Arm.Arm;
+import frc.robot.subsystems.Limelight.LimelightData;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -27,7 +27,6 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -43,13 +42,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
-
-
 public class RobotContainer {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Subsystems
   /////////////////////////////////////////////////////////////////////////////////////////////////////////  
-  // private final DriveTrain driveTrain = new DriveTrain();
+  private final DriveTrain driveTrain = new DriveTrain();
   // private final Intake intake = new Intake();
    private final Claw claw = new Claw();
  //  private final Arm arm = new Arm();
@@ -59,7 +56,6 @@ public class RobotContainer {
   private LED led = new LED();
 
   private final NetworkTable networkTable =  NetworkTableInstance.getDefault().getTable("limelight");
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
   // Commands
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   // private final Command startArm = Commands.runOnce(armExtension::enable, armExtension);
@@ -93,22 +89,25 @@ public class RobotContainer {
     //           () ->
     //           driveTrain.arcadeDrive(
     //                 joystick1.getRawAxis(1), -joystick1.getRawAxis(0), true),
-    //                   driveTrain));    
+    //                   driveTrain));
+
+              driveTrain.setDefaultCommand(
+                    new RunCommand(
+                        () -> {
+                        new JoystickButton(buttonBoard, 3).onTrue(new ClawPos(-0.25, claw));
+                        new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.25, claw));
+                      }));
+                        // new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.25, claw)))));
+    
+
             
   }
 
   private void configureButtonBindings() {
     // new JoystickButton(buttonBoard, 1).whileTrue(intake.runIntake(0.5));
-    // new JoystickButton(buttonBoard, 2).onTrue(new TurnToAngle(10, driveTrain));
-
-    // Claw
-    new JoystickButton(buttonBoard, 3).onTrue(new ClawOpen(claw));
-    new JoystickButton(buttonBoard, 4).onTrue(new ClawClose(claw));
-
-    // new JoystickButton(buttonBoard, 5).onTrue(startArm);
-    // new JoystickButton(buttonBoard, 5).onFalse(stopArm);
-
- //   new JoystickButton(buttonBoard, 6).onTrue(armToAngle);
+    new JoystickButton(buttonBoard, 2).onTrue(new TurnToAngle(10, driveTrain));
+    new JoystickButton(buttonBoard, 3).onTrue(new ClawPos(-0.25, claw));
+    new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.25, claw));
   }
 
   public void showTelemetry() {
@@ -119,26 +118,18 @@ public class RobotContainer {
     // SmartDashboard.putNumber("Encoder Left value", driveTrain.getLeftDistance());
     // SmartDashboard.putNumber("Encoder Right value", driveTrain.getRightDistance());
 
-     SmartDashboard.putNumber("Encoder value Claw", claw.getEncoderPosition());
+    SmartDashboard.putNumber("Encoder value Claw", claw.getEncoderPosition());
     // Limelight
    
 
-   // System.out.println( limelight.getX());
+    System.out.println( LimelightData.getX());
 
-    // SmartDashboard.putNumber("arm error", ((ArmToAngle) armToAngle).getError());
-    // SmartDashboard.putNumber("arm angle", ((ArmToAngle) armToAngle).getAngle());
 
-    // SmartDashboard.putNumber("Ultrasonic Distance", driveTrain.getUltrasonicDistance());
-    // SmartDashboard.putNumber("Ultrasonic Distance 1", driveTrain.getUltrasonicDistance1());
+    SmartDashboard.putNumber("Ultrasonic Distance", driveTrain.getUltrasonicDistance());
+    SmartDashboard.putNumber("Ultrasonic Distance 1", driveTrain.getUltrasonicDistance1());
 
-    // SmartDashboard.putNumber("LimelightX", limelight.getX());
-    // SmartDashboard.putNumber("LimelightY", limelight.getY());
-
-    // ShuffleboardTab tab = Shuffleboard.getTab("Arm");
-    // NetworkTableEntry armEnable = tab.add("Arm Enable", false).getEntry();
-
-    // new NetworkButton(armEnable).onTrue(new InstantCommand(arm::enable));
-
+    SmartDashboard.putNumber("LimelightX", LimelightData.getX());
+    SmartDashboard.putNumber("LimelightY", LimelightData.getY());
 
 
     // NetworkTableEntry tx = networkTable.getEntry("tx");
@@ -154,7 +145,14 @@ public class RobotContainer {
     // networkTable.getEntry("ledMode").setNumber(3);
     // System.out.println(networkTable.getEntry("tid").getDoubleArray(new double[6])[0]);
     
-     // System.out.println();
+    LimelightData.update();
+    LimelightData.dataTest();
+
+
+
+
+    // Double tagID = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDoubleArray(new double[6]);
+    // System.out.println();
     // System.out.println("print");
   }
 

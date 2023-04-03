@@ -5,6 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
+import java.util.List;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -61,6 +70,10 @@ public final class Constants {
         // Ultrasonic sensor
         public static final int kUltrasonicPort = 0;
         public static final int kUltrasonicPort1 = 1;
+
+    // Encoder ticks to feet
+    public static final double kDriveTickToFeet = (1.0/4096) * 6 * (Math.PI/12);
+    // private static final double kArmTickToDegrees = 360.0 / 512 * 26 / 42 * 18 / 60 * 18 / 84;
     }
 
     public static final class AutoConstants {
@@ -106,4 +119,18 @@ public final class Constants {
 
     public static final int kDriverControllerPort = 0;
     public static final int kDriverControllerPort2 = 1;
+
+    public static final class VisionConstants {
+        // Adjust please
+        public static final double kvisionCameraX = Units.inchesToMeters(0);
+        public static final double kvisionCameraY = Units.inchesToMeters(0);
+        public static final double kvisionCameraZ = Units.inchesToMeters(0);
+        public static final Rotation3d kvisionCameraRotation = new Rotation3d(Units.degreesToRadians(0.0), Units.degreesToRadians(0.0), Units.degreesToRadians(0.0));
+        
+        // Configure this
+        public static final int klimelightPipelineAprilTag = 1;
+
+    }
+
+    
 }
