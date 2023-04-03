@@ -19,7 +19,7 @@ public class Claw extends SubsystemBase {
     }
 
     public void setPower(double power){
-        clawMotor.set(power);
+        clawMotor.set(power*0.1);
     }
 
     public double getEncoderPosition() {

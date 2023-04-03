@@ -1,20 +1,19 @@
-package frc.robot.commands;
+package frc.robot.commands.Claw;
 
-import frc.robot.subsystems.*;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
+import frc.robot.Constants.ClawConstants;
+import frc.robot.subsystems.Claw;
 
-public class ArmPos extends PIDCommand {
-
-    //TODO: Change to arm and update balues for constants
+public class ClawClose extends PIDCommand {
     
-    public ArmPos(double pos, Claw claw) {
+    public ClawClose(Claw claw) {
         super(
-            new PIDController(0.7, 0.2, 0),
+            new PIDController(0.2, 0.02, 0.04),
             // Close loop on encoder position
             claw::getEncoderPosition,
             // Set reference to target
-            pos,
+            ClawConstants.clawPosClose,
             // Pipe output to move claw
             output -> claw.setPower(output),
             // Require the claw
