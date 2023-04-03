@@ -9,6 +9,7 @@ import frc.robot.commands.ClawPos;
 import frc.robot.commands.TurnToAngle;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Limelight.LimelightData;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -24,7 +25,6 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -35,8 +35,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
-
-
 public class RobotContainer {
   // Subsystems
   private final DriveTrain driveTrain = new DriveTrain();
@@ -46,7 +44,7 @@ public class RobotContainer {
   private final Limelight limelight = new Limelight();
   private LED led = new LED();
 
-  private final NetworkTable networkTable =  NetworkTableInstance.getDefault().getTable("limelight");
+  // private final NetworkTable networkTable =  NetworkTableInstance.getDefault().getTable("limelight");
   // Commands
   
   // Controllers
@@ -56,30 +54,19 @@ public class RobotContainer {
   public RobotContainer() {
     configureButtonBindings();
 
-    // driveTrain.setDefaultCommand(
-    //   new RunCommand(
-    //           () ->
-    //           driveTrain.arcadeDrive(
-    //                 joystick1.getRawAxis(1), -joystick1.getRawAxis(0), true),
-    //                   driveTrain));
-
-              driveTrain.setDefaultCommand(
-                    new RunCommand(
-                        () -> {
-                        new JoystickButton(buttonBoard, 3).onTrue(new ClawPos(-0.25, claw));
-                        new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.25, claw));
-                      }));
-                        // new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.25, claw)))));
-    
-
-            
+    driveTrain.setDefaultCommand(
+      new RunCommand(
+              () ->
+              driveTrain.arcadeDrive(
+                    joystick1.getRawAxis(1), -joystick1.getRawAxis(0), true),
+                      driveTrain));
   }
 
   private void configureButtonBindings() {
     new JoystickButton(buttonBoard, 1).whileTrue(intake.runIntake(0.5));
     new JoystickButton(buttonBoard, 2).onTrue(new TurnToAngle(10, driveTrain));
-    new JoystickButton(buttonBoard, 3).onTrue(new ClawPos(-0.25, claw));
-    new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.25, claw));
+    new JoystickButton(buttonBoard, 3).onTrue(new ClawPos(-0.5, claw));
+    new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.5, claw));
   }
 
   public void showTelemetry() {
@@ -92,33 +79,18 @@ public class RobotContainer {
     SmartDashboard.putNumber("Encoder Right value", driveTrain.getRightDistance());
 
     SmartDashboard.putNumber("Encoder value Claw", claw.getEncoderPosition());
-    // Limelight
-   
-
-    System.out.println( limelight.getX());
-
 
     SmartDashboard.putNumber("Ultrasonic Distance", driveTrain.getUltrasonicDistance());
     SmartDashboard.putNumber("Ultrasonic Distance 1", driveTrain.getUltrasonicDistance1());
-
-    SmartDashboard.putNumber("LimelightX", limelight.getX());
-    SmartDashboard.putNumber("LimelightY", limelight.getY());
-
-
-    // NetworkTableEntry tx = networkTable.getEntry("tx");
-    // System.out.println(tx.getDouble(0));
-    //  double tagID = networkTable.getDefault().getTable("limelight")
-    // private final NetworkTable tagID = 
-
-    // double[] id = networkTable.getEntry("botpose").getDoubleArray(new double[6]);
-    // for (int i = 0; i<id.length; i++ ) {
-    //   System.out.println("i value: " + Integer.toString(i) + ". Value:  " + id[i]);
-    // }
-
-    // networkTable.getEntry("ledMode").setNumber(3);
-    // System.out.println(networkTable.getEntry("tid").getDoubleArray(new double[6])[0]);
     
-     // System.out.println();
+    LimelightData.update();
+    LimelightData.dataTest();
+
+
+
+
+    // Double tagID = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDoubleArray(new double[6]);
+    // System.out.println();
     // System.out.println("print");
   }
 

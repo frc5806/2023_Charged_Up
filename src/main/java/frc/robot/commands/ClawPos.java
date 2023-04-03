@@ -1,3 +1,4 @@
+/*  */
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -6,9 +7,10 @@ import frc.robot.subsystems.Claw;
 
 public class ClawPos extends PIDCommand {
     
+    // Takes in target and Claw instance
     public ClawPos(double pos, Claw claw) {
         super(
-            new PIDController(1, 0.2, 0),
+            new PIDController(1, 0.2, 0), // CHANGE
             // Close loop on encoder position
             claw::getEncoderPosition,
             // Set reference to target
