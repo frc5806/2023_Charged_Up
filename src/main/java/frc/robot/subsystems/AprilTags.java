@@ -98,7 +98,27 @@ public class AprilTags extends SubsystemBase {
     // }
 
 
+        public static class AprilAutonomous {
+            /*
+                TO-DO: 
+                Set starting positions (by using Field Constants)
+                Drive to closest tag (by using limelight data; find distance.)
 
+                Useful to estimate Pose: https://docs.photonvision.org/en/latest/docs/examples/simposeest.html
+            
+                *** Also look at notepad notes.
+            */
+
+
+            public static void moveToApril() {
+                // if april tag detected
+                // Calculate distance from center of robot to april
+                // move until april is half the center of robot away from april tag
+
+
+
+            }
+        }
 
 
 }

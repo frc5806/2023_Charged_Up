@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 // package com.stuypulse.stuylib.network.limelight;
 
+
+import com.kauailabs.navx.IMUProtocol;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.math.Vector2D;
 
@@ -10,10 +12,13 @@ import com.stuypulse.stuylib.network.limelight.*;
 
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-
-
+import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -89,6 +94,28 @@ public class Limelight extends SubsystemBase {
         public static void setPipeline(int pipelineNum) {
             table.getEntry("pipeline").setNumber(pipelineNum);
         }
+    }
+
+    public static class PoseEstimators {
+        
+
+        public static void initiatePoseEstimator(DriveTrain driveTrain, Pose2d initialPoseMeters) {
+
+            final DifferentialDrivePoseEstimator poseEstimator =
+                new DifferentialDrivePoseEstimator(
+                    DriveConstants.kDriveKinematics, 
+                    driveTrain.getAngle(), 
+                    driveTrain.getLeftDistance(), 
+                    driveTrain.getRightDistance(), 
+                    new Pose2d(),
+                    VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+                    VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+
+
+            poseEstimator.update(driveTrain.getAngle(), driveTrain.getLeftDistance(), driveTrain.getRightDistance());
+
+        }
+        
     }
 
 

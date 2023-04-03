@@ -1,0 +1,43 @@
+FieldConstants: calculates the absolute location of everything on the field.
+
+cameraPoses sets the location of the camera.
+
+Line 210 // Get tag poses and update last detection times
+		Make an array
+
+211 loop through the stored data
+212 store the tag id
+213 in lastDectionTime array, add the tagID and the time of detection
+214 From field constants, get the location (pose) of the tag by using the tagID
+215 If the tagpose is present, then add it to the array
+	
+*** Is FieldConstants.aprilTags.getTagPose() dynamic where it automatically updates, or is there some method that does this?
+
+
+109 // Create map of last detection times 
+110 FieldConstants.aprilTags.
+111 get the tags
+112 Loops through each of the tags
+113 Combine the tags into a map: for each tag ID, set the last dection time to zero
+	(aprilID, lastDetection) ~ (ID, 0.0)
+
+
+152 I think that it's transforming the camera pose into robot pose. That's different from what I'm trying to do, since my camera location is set relative to the robot. They're doing everything relative to the camera. I'll stick with mine from now (I can see an issue with mine since it will want to continue moving forward even after the front has reached the target, but my camera won't be set on the front, so I can do the math to know 
+		how far the center of the robot has to be for it to stop).
+
+
+YOU WERE JUST TRYING TO INITIALIZE A LOCATION FOR THE ROBOT
+https://docs.wpilib.org/en/stable/docs/software/advanced-controls/state-space/state-space-pose-estimators.html
+	--> Problem, I need to use limelight data.
+
+
+	TO-DO: 
+	Set starting positions (by using Field Constants)
+	Drive to closest tag (by using limelight data; find distance.)
+
+	Useful to estimate Pose: https://docs.photonvision.org/en/latest/docs/examples/simposeest.html
+
+
+
+
+
