@@ -96,8 +96,25 @@ public final class Constants {
         public static final int kIntakeMotorPort4 = 11;
     }
 
+    public static final class ArmConstants {
+        public static final int kArmMotorPort = 20;
+        public static final int kArmMotorPort1 = 18;
+        public static final int kArmMotorPort2 = 4;
+        public static final int kArmMotorPort3 = 2;
+
+        public static final int countsPerRev = 42;
+
+        public static final double kP = 0.1;
+        public static final double kI = 0;
+        public static final double kD = 0;
+
+    }
+
     public static final class ClawConstants {
-        public static final int kClawMotorPort = 4;
+        public static final int kClawMotorPort = 18;
+
+        public static final double clawPosOpen = -2.75;
+        public static final double clawPosClose = 1;
     }
 
     public static final int kDriverControllerPort = 0;

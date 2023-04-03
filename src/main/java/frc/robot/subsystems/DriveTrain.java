@@ -204,18 +204,9 @@ public class DriveTrain extends SubsystemBase {
         return gyro.getRate();
     }
 
-    public double getKinematics() {
-        // TODO: Update
-        return 0;
-    }
-
     public void setMaxOutput(double max) {
         drivetrain.setMaxOutput(max);
     }
-
-     public double outtakeVolts(){
-         return 0;
-     }
 
     public Pose2d getPose(){
         return odometry.getPoseMeters();
