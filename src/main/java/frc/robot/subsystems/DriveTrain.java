@@ -93,18 +93,14 @@ public class DriveTrain extends SubsystemBase {
 
     }
 
+    public void motorConfig(){
+        for (CANSparkMax motor: leftMotors){
+            motor.setInverted(false);
+        }
 
-
-    public static Command TurnToAngle(double angle, DriveTrain driveTrain) {
-
-        PIDController controller = new PIDController(DriveConstants.kTurnP, DriveConstants.kTurnI, DriveConstants.kTurnD);
-
-        // controller.setPositionTolerance(DriveConstants.kTurnP);
-
-        return run(() -> arcadeDrive(0, -controller.calculate(driveTrain.getAngle(), angle)))
-                .until(controller::atSetpoint)
-                .andThen(runOnce(() -> driveTrain.safteyDrive()));
-      
+        for (CANSparkMax motor: rightMotors){
+            motor.setInverted(true);
+        }
     }
 
 

@@ -13,6 +13,7 @@ import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.network.limelight.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -206,8 +207,8 @@ public class Limelight extends SubsystemBase {
 
         }
 
-        public static Command runTurnToAngleCommand(double angle, DriveTrain driveTrain) {
-            return DriveTrain.TurnToAngle(angle, driveTrain);
+        public static PIDCommand runTurnToAngleCommand(double angle, DriveTrain driveTrain) {
+            return new TurnToAngle(angle, driveTrain);
         }
 
         
