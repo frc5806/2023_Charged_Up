@@ -173,7 +173,8 @@ public class Limelight extends SubsystemBase {
     
     public static class LimelightAutonomous {
 
-        public static void limelightAutonomousDrive(DriveTrain driveTrain, double output) {
+        // It actually just goes to whatever the closest april tag is, not just the grids...might fix
+        public static void gridAutonomousDrive(DriveTrain driveTrain, double output) {
             // ***** FOR THIS METHOD, CHECK THAT Y IS ACTUALLY DIRECTION FACING TAG
 
             // get the current position
@@ -209,6 +210,18 @@ public class Limelight extends SubsystemBase {
 
         public static PIDCommand runTurnToAngleCommand(double angle, DriveTrain driveTrain) {
             return new TurnToAngle(angle, driveTrain);
+        }
+
+        // Chargestation autonomous
+        public void runChargestationAutonomous() {
+            // Calculate position in the field by using an april tag
+
+            // Use FieldConstants to drive robot to charge station
+
+            // get on charge station
+
+
+            // use gyro to balance
         }
 
         
