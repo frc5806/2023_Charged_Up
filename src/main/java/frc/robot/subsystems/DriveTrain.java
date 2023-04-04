@@ -224,6 +224,18 @@ public class DriveTrain extends SubsystemBase {
 
     // }
 
+    // Chargestation autonomous
+    public void runChargestationAutonomous() {
+        // Calculate position in the field by using an april tag
+
+        // Use FieldConstants to drive robot to charge station
+
+        // get on charge station
+
+
+        // use gyro to balance
+    }
+
     @Override
     public void periodic() {
         odometry.update(
