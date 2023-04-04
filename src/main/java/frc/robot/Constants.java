@@ -33,13 +33,13 @@ public final class Constants {
         public static final double kRobotLength = 0;
         public static final double kRobotWidth = 0;
 
-        public static final int kLeftMotor1Port = 1;
-        public static final int kLeftMotor2Port = 2;
-        public static final int kLeftMotor3Port = 3;
+        public static final int kLeftMotor1Port = 17;
+        public static final int kLeftMotor2Port = 4;
+        public static final int kLeftMotor3Port = 20;
 
-        public static final int kRightMotor1Port = 5;
-        public static final int kRightMotor2Port = 6;
-        public static final int kRightMotor3Port = 7;
+        public static final int kRightMotor1Port = 1;
+        public static final int kRightMotor2Port = 8;
+        public static final int kRightMotor3Port = 18;
 
         public static final int[] kLeftEncoderPorts = new int[] { 0, 1 };
         public static final int[] kRightEncoderPorts = new int[] { 2, 3 };
@@ -93,15 +93,15 @@ public final class Constants {
     public static final int ledLength = 88;
 
     public static final class IntakeConstants {
-        public static final int kIntakeMotorPort1 = 8;
-        public static final int kIntakeMotorPort2 = 9;
-        public static final int kIntakeMotorPort3 = 10;
-        public static final int kIntakeMotorPort4 = 11;
+        public static final int kIntakeMotorPort1 = 5; // 8
+        // public static final int kIntakeMotorPort2 = 9;
+        // public static final int kIntakeMotorPort3 = 10;
+        // public static final int kIntakeMotorPort4 = 11;
     }
 
     public static final class ArmConstants {
         public static final int kArmMotorPort = 20;
-        public static final int kArmMotorPort1 = 18;
+        public static final int kArmMotorPort1 = 0; // 18
         public static final int kArmMotorPort2 = 4;
         public static final int kArmMotorPort3 = 2;
 
@@ -114,7 +114,7 @@ public final class Constants {
     }
 
     public static final class ClawConstants {
-        public static final int kClawMotorPort = 18;
+        public static final int kClawMotorPort = 3;
 
         public static final double clawPosOpen = -2.75;
         public static final double clawPosClose = 1;

@@ -49,7 +49,7 @@ public class RobotContainer {
   // Subsystems
   /////////////////////////////////////////////////////////////////////////////////////////////////////////  
   private final DriveTrain driveTrain = new DriveTrain();
-  // private final Intake intake = new Intake();
+  private final Intake intake = new Intake();
    private final Claw claw = new Claw();
  //  private final Arm arm = new Arm();
  // private final ArmExtension armExtension = new ArmExtension();
@@ -87,27 +87,18 @@ public class RobotContainer {
   public RobotContainer() {
     configureButtonBindings();
 
-    // driveTrain.setDefaultCommand(
-    //   new RunCommand(
-    //           () ->
-    //           driveTrain.arcadeDrive(
-    //                 joystick1.getRawAxis(1), -joystick1.getRawAxis(0), true),
-    //                   driveTrain));
-
-              driveTrain.setDefaultCommand(
-                    new RunCommand(
-                        () -> {
-                        new JoystickButton(buttonBoard, 3).onTrue(new ClawPos(-0.25, claw));
-                        new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.25, claw));
-                      }));
-                        // new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.25, claw)))));
-    
+    driveTrain.setDefaultCommand(
+      new RunCommand(
+              () ->
+              driveTrain.arcadeDrive(
+                    joystick1.getRawAxis(1), -joystick1.getRawAxis(0), true),
+                      driveTrain));    
 
             
   }
 
   private void configureButtonBindings() {
-    // new JoystickButton(buttonBoard, 1).whileTrue(intake.runIntake(0.5));
+    new JoystickButton(buttonBoard, 1).whileTrue(intake.runIntake(0.1));
     new JoystickButton(buttonBoard, 2).onTrue(new TurnToAngle(10, driveTrain));
     new JoystickButton(buttonBoard, 3).onTrue(new ClawPos(-0.25, claw));
     new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.25, claw));
