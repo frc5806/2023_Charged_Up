@@ -30,6 +30,9 @@ import java.util.List;
 public final class Constants {
     // TODO: Update all constants + find new later
     public static final class DriveConstants {
+        public static final double kRobotLength = 0;
+        public static final double kRobotWidth = 0;
+
         public static final int kLeftMotor1Port = 1;
         public static final int kLeftMotor2Port = 2;
         public static final int kLeftMotor3Port = 3;
@@ -129,6 +132,7 @@ public final class Constants {
         
         // Configure this
         public static final int klimelightPipelineAprilTag = 1;
+        public static final int klimelightPipelineVision = 0;
 
     }
 

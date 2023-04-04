@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import java.lang.Math;
+import java.text.spi.DecimalFormatSymbolsProvider;
+
 // package com.stuypulse.stuylib.network.limelight;
 
 
@@ -9,15 +12,23 @@ import com.stuypulse.stuylib.math.Vector2D;
 
 import com.stuypulse.stuylib.network.limelight.*;
 
-
-
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.VisionConstants;
+import frc.robot.commands.DriveTrain.TurnToAngle;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -91,17 +102,24 @@ public class Limelight extends SubsystemBase {
             table.getEntry("ledMode").setNumber(3);
         }
 
-        public static void setPipeline(int pipelineNum) {
-            table.getEntry("pipeline").setNumber(pipelineNum);
+        public static void setPipelineApril() {
+            table.getEntry("pipeline").setNumber(VisionConstants.klimelightPipelineAprilTag);
+        }
+
+        public static void setPipelineVision() {
+            table.getEntry("pipeline").setNumber(VisionConstants.klimelightPipelineVision);
         }
     }
 
     public static class PoseEstimators {
+
+        static DifferentialDrivePoseEstimator poseEstimator;
         
 
-        public static void initiatePoseEstimator(DriveTrain driveTrain, Pose2d initialPoseMeters) {
+        public PoseEstimators(DriveTrain driveTrain) {
+            LimelightMode.setPipelineApril();
 
-            final DifferentialDrivePoseEstimator poseEstimator =
+             DifferentialDrivePoseEstimator poseEstimator = // was final; might break code
                 new DifferentialDrivePoseEstimator(
                     DriveConstants.kDriveKinematics, 
                     driveTrain.geRotation2d(), 
@@ -110,11 +128,88 @@ public class Limelight extends SubsystemBase {
                     new Pose2d(),
                     VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
                     VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+        }
 
+        public static void updatePoseEstimator(DriveTrain driveTrain) {
 
             poseEstimator.update(driveTrain.geRotation2d(), driveTrain.getLeftDistance(), driveTrain.getRightDistance());
 
+            // relative robot pos to april tag
+
+            // MAKE SURE TO CHANGE PIPELINE TO APRIL
+            Pose3d visionMeasurement3d = 
+                new Pose3d(new Translation3d(LimelightData.getX(), LimelightData.getY(), 0.0), new Rotation3d(0,0,0));
+            
+
+            Pose2d visionMeasurement2d = visionMeasurement3d.toPose2d();
+
+            poseEstimator.addVisionMeasurement(visionMeasurement2d, Timer.getFPGATimestamp());
+
+
+
         }
+
+        public static Pose2d getCurrentRobotPose() {
+           Pose2d currentPose =  poseEstimator.getEstimatedPosition();
+           return currentPose;
+        }
+
+        public static double getCurrentRobotPoseX() {
+            return getCurrentRobotPose().getX();
+        }
+
+        public static double getCurrentRobotPoseY() {
+            return getCurrentRobotPose().getY();
+        }
+
+
+
+
+
+
+        }
+        
+    
+    public static class LimelightAutonomous {
+
+        public static void limelightAutonomousDrive(DriveTrain driveTrain, double output) {
+            // ***** FOR THIS METHOD, CHECK THAT Y IS ACTUALLY DIRECTION FACING TAG
+
+            // get the current position
+            // if the current distance (pose) form the tag is more than we want, drive until tag
+
+            Pose2d currentPose = PoseEstimators.getCurrentRobotPose();
+            
+
+            double currentX = currentPose.getX();
+            double currentY = currentPose.getY();
+
+            // double startingTheta = Math.PI/2;
+            double startingTheta = driveTrain.getAngle();
+            double angleFromAprilTag = Math.atan(currentY/currentX);
+            double angleToTurn = startingTheta - angleFromAprilTag; // pi/2 - tan^-1(y/x)
+
+            // TURN ANGLE
+
+            runTurnToAngleCommand(angleToTurn, driveTrain);
+
+            // NOW MOVE FORWARD
+            while (currentY - DriveConstants.kRobotLength > 0) {
+                driveTrain.arcadeDrive(output, 0, false);
+
+            }
+
+            // NOW TURN AGAIN
+
+            runTurnToAngleCommand(angleToTurn, driveTrain);
+
+
+        }
+
+        public static Command runTurnToAngleCommand(double angle, DriveTrain driveTrain) {
+            return DriveTrain.TurnToAngle(angle, driveTrain);
+        }
+
         
     }
 

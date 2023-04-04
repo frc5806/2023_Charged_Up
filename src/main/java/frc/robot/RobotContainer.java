@@ -11,6 +11,7 @@ import frc.robot.commands.DriveTrain.TurnToAngle;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Limelight.LimelightData;
+import frc.robot.subsystems.Limelight.PoseEstimators;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -56,6 +57,7 @@ public class RobotContainer {
   private LED led = new LED();
 
   private final NetworkTable networkTable =  NetworkTableInstance.getDefault().getTable("limelight");
+  private final PoseEstimators poseEstimators = new PoseEstimators(driveTrain);
   // Commands
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   // private final Command startArm = Commands.runOnce(armExtension::enable, armExtension);
@@ -162,68 +164,76 @@ public class RobotContainer {
   }
 
 
-  //  public Command getAutonomousCommand() {
-  //     var autoVoltageConstraint =
-  //         new DifferentialDriveVoltageConstraint(
-  //             new SimpleMotorFeedforward(
-  //                 DriveConstants.ksVolts,
-  //                 DriveConstants.kvVoltSecondsPerMeter,
-  //                 DriveConstants.kaVoltSecondsSquaredPerMeter),
-  //             DriveConstants.kDriveKinematics,
-  //             2);
+   //public Command getAutonomousCommand() {
+    //   var autoVoltageConstraint =
+    //       new DifferentialDriveVoltageConstraint(
+    //           new SimpleMotorFeedforward(
+    //               DriveConstants.ksVolts,
+    //               DriveConstants.kvVoltSecondsPerMeter,
+    //               DriveConstants.kaVoltSecondsSquaredPerMeter),
+    //           DriveConstants.kDriveKinematics,
+    //           2);
 
-  //     TrajectoryConfig config =
-  //         new TrajectoryConfig(
-  //                 AutoConstants.kMaxSpeedMetersPerSecond,
-  //                 AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-  //             .setKinematics(DriveConstants.kDriveKinematics)
-  //             .addConstraint(autoVoltageConstraint);
+    //   TrajectoryConfig config =
+    //       new TrajectoryConfig(
+    //               AutoConstants.kMaxSpeedMetersPerSecond,
+    //               AutoConstants.kMaxAccelerationMetersPerSecondSquared)
+    //           .setKinematics(DriveConstants.kDriveKinematics)
+    //           .addConstraint(autoVoltageConstraint);
 
-  //     // An example trajectory to follow.  All units in meters.
-  //     //  Trajectory exampleTrajectory =
-  //     //   TrajectoryGenerator.generateTrajectory(
-  //     //       // Start at the origin facing the +X direction
-  //     //       new Pose2d(0, 0, new Rotation2d(0)),
-  //     //       // Pass through these two interior waypoints, making an 's' curve path
-  //     //       List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-  //     //       // List.of(new Translation2d(0, 0), new Translation2d(2, -1)),
+    //   // An example trajectory to follow.  All units in meters.
+    //   //  Trajectory exampleTrajectory =
+    //   //   TrajectoryGenerator.generateTrajectory(
+    //   //       // Start at the origin facing the +X direction
+    //   //       new Pose2d(0, 0, new Rotation2d(0)),
+    //   //       // Pass through these two interior waypoints, making an 's' curve path
+    //   //       List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+    //   //       // List.of(new Translation2d(0, 0), new Translation2d(2, -1)),
 
-  //     //       // End 3 meters straight ahead of where we started, facing forward
-  //     //       new Pose2d(3, 0, new Rotation2d(0)),
-  //     //       // Pass config
-  //     //       config); 
+    //   //       // End 3 meters straight ahead of where we started, facing forward
+    //   //       new Pose2d(3, 0, new Rotation2d(0)),
+    //   //       // Pass config
+    //   //       config); 
 
-  //   String trajectoryJSON = "paths/Test_Auto.wpilib.json";
-  //   Trajectory trajectory = new Trajectory();
+    // String trajectoryJSON = "paths/Test_Auto.wpilib.json";
+    // Trajectory trajectory = new Trajectory();
           
-  //   try {
-  //       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-  //       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-  //   } catch (IOException ex) {
-  //       DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
-  //   }
+    // try {
+    //     Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
+    //     trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    // } catch (IOException ex) {
+    //     DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+    // }
 
-  //   RamseteCommand ramseteCommand =
-  //       new RamseteCommand(
-  //           trajectory,
-  //           driveTrain::getPose,
-  //           new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
-  //           new SimpleMotorFeedforward(
-  //               DriveConstants.ksVolts,
-  //               DriveConstants.kvVoltSecondsPerMeter,
-  //               DriveConstants.kaVoltSecondsSquaredPerMeter),
-  //           DriveConstants.kDriveKinematics,
-  //           driveTrain::getWheelSpeeds,
-  //           new PIDController(DriveConstants.kPDriveVel, 0, 0),
-  //           new PIDController(DriveConstants.kPDriveVel, 0, 0),
-  //           // RamseteCommand passes volts to the callback
-  //           driveTrain::tankDriveVolts,
-  //           driveTrain);
+    // RamseteCommand ramseteCommand =
+    //     new RamseteCommand(
+    //         trajectory,
+    //         driveTrain::getPose,
+    //         new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
+    //         new SimpleMotorFeedforward(
+    //             DriveConstants.ksVolts,
+    //             DriveConstants.kvVoltSecondsPerMeter,
+    //             DriveConstants.kaVoltSecondsSquaredPerMeter),
+    //         DriveConstants.kDriveKinematics,
+    //         driveTrain::getWheelSpeeds,
+    //         new PIDController(DriveConstants.kPDriveVel, 0, 0),
+    //         new PIDController(DriveConstants.kPDriveVel, 0, 0),
+    //         // RamseteCommand passes volts to the callback
+    //         driveTrain::tankDriveVolts,
+    //         driveTrain);
 
-  //   // Reset odometry to the starting pose of the trajectory.
-  //   driveTrain.resetOdometry(trajectory.getInitialPose());
+    
 
-  //   // Run path following command, then stop at the end.
-  //   return ramseteCommand.andThen(() -> driveTrain.tankDriveVolts(0, 0));
-  // }
+    // // Reset odometry to the starting pose of the trajectory.
+    // driveTrain.resetOdometry(trajectory.getInitialPose());
+
+    // // Run path following command, then stop at the end.
+    // return ramseteCommand.andThen(() -> driveTrain.tankDriveVolts(0, 0));
+    // return     PoseEstimators.updatePoseEstimator(driveTrain); // NOT A COMMAND
+
+    // return ramseteCommand();
+    
+
+
+  //}
 }

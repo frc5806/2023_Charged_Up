@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
       autonomousCommand.cancel();
     }
 
-    LimelightMode.setPipeline(VisionConstants.klimelightPipelineAprilTag);
+    LimelightMode.setPipelineApril();
   }
 
   @Override

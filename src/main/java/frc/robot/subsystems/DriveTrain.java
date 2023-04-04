@@ -4,6 +4,8 @@ import frc.robot.Constants.DriveConstants;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,6 +22,7 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.stuypulse.stuylib.control.feedback.PIDController;
 
 public class DriveTrain extends SubsystemBase {
     private final CANSparkMax[] leftMotors;
@@ -90,16 +93,20 @@ public class DriveTrain extends SubsystemBase {
 
     }
 
-// config
-    public void motorConfig() {
-        for (CANSparkMax motor : leftMotors){
-            motor.setInverted(false);
-        }
 
-        for (CANSparkMax motor : rightMotors){
-            motor.setInverted(true);
-        }
+
+    public static Command TurnToAngle(double angle, DriveTrain driveTrain) {
+
+        PIDController controller = new PIDController(DriveConstants.kTurnP, DriveConstants.kTurnI, DriveConstants.kTurnD);
+
+        // controller.setPositionTolerance(DriveConstants.kTurnP);
+
+        return run(() -> arcadeDrive(0, -controller.calculate(driveTrain.getAngle(), angle)))
+                .until(controller::atSetpoint)
+                .andThen(runOnce(() -> driveTrain.safteyDrive()));
+      
     }
+
 
     public void setSetpoint(int setpoint)
     {
