@@ -21,7 +21,7 @@ public class AprilAutonomous extends PIDCommand{
         super (
             new PIDController(DriveConstants.kTurnP, DriveConstants.kTurnI, DriveConstants.kTurnD), 
             //
-            PoseEstimators.getCurrentRobotPoseY(), // get current position 
+            PoseEstimators::getCurrentRobotPoseY, // get current position 
             // Target output should be distance from front of apriltag
             DriveConstants.kRobotLength, 
             output -> driveTrain.arcadeDrive(0, output, false),       
