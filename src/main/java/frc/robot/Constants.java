@@ -14,6 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import java.util.List;
+import java.util.function.DoubleSupplier;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -94,9 +95,13 @@ public final class Constants {
 
     public static final class IntakeConstants {
         public static final int kIntakeMotorPort1 = 5; // 8
-        // public static final int kIntakeMotorPort2 = 9;
+        public static final int kIntakeMotorPort2 = 11;
         // public static final int kIntakeMotorPort3 = 10;
         // public static final int kIntakeMotorPort4 = 11;
+
+        public static final int intakePosClose = -7;
+        public static final int intakePosOpen = 7;
+
     }
 
     public static final class ArmConstants {

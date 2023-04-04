@@ -9,6 +9,7 @@ import frc.robot.commands.AprilAutonomous;
 import frc.robot.commands.Arm.ArmToAngle;
 import frc.robot.commands.Claw.*;
 import frc.robot.commands.DriveTrain.TurnToAngle;
+import frc.robot.commands.Intake.*;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Vision.Limelight;
@@ -99,8 +100,12 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    new JoystickButton(buttonBoard, 1).whileTrue(intake.runIntake(0.1));
-    new JoystickButton(buttonBoard, 2).onTrue(new TurnToAngle(10, driveTrain));
+    new JoystickButton(joystick1, 1).whileTrue(intake.runIntake(0.8));
+    new JoystickButton(joystick1, 2).whileTrue(intake.runIntake(-0.8));
+
+    new JoystickButton(joystick1, 5).onTrue(new IntakeExtend(intake));
+    new JoystickButton(joystick1, 6).onTrue(new IntakeRetract(intake));
+
     new JoystickButton(buttonBoard, 3).onTrue(new ClawPos(-0.25, claw));
     new JoystickButton(buttonBoard, 4).onTrue(new ClawPos(0.25, claw));
   }
@@ -108,21 +113,15 @@ public class RobotContainer {
   public void showTelemetry() {
     // Gyro
     // SmartDashboard.putNumber("Gyro orientation", driveTrain.getAngle());
-    // SmartDashboard.putNumber("Gyro", driveTrain.getTurnRate());
-    // // Encoders
+    
+    // Encoders
     // SmartDashboard.putNumber("Encoder Left value", driveTrain.getLeftDistance());
     // SmartDashboard.putNumber("Encoder Right value", driveTrain.getRightDistance());
-
     SmartDashboard.putNumber("Encoder value Claw", claw.getEncoderPosition());
-    // Limelight
+    SmartDashboard.putNumber("Encoder value Intake", intake.getIntakeEncoderPos());
    
-
+    // Limelight
     System.out.println( LimelightData.getX());
-
-
-    SmartDashboard.putNumber("Ultrasonic Distance", driveTrain.getUltrasonicDistance());
-    SmartDashboard.putNumber("Ultrasonic Distance 1", driveTrain.getUltrasonicDistance1());
-
     SmartDashboard.putNumber("LimelightX", LimelightData.getX());
     SmartDashboard.putNumber("LimelightY", LimelightData.getY());
 
@@ -142,9 +141,6 @@ public class RobotContainer {
     
     LimelightData.update();
     LimelightData.dataTest();
-
-
-
 
     // Double tagID = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDoubleArray(new double[6]);
     // System.out.println();
