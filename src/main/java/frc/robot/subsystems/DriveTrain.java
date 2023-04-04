@@ -22,7 +22,6 @@ import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.stuypulse.stuylib.control.feedback.PIDController;
 
 public class DriveTrain extends SubsystemBase {
     private final CANSparkMax[] leftMotors;
@@ -45,10 +44,6 @@ public class DriveTrain extends SubsystemBase {
 
     DifferentialDriveKinematics kinematics;
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(2.0, 0, 1.0);
-
-    int P, I, D = 1;
-    int integral, previous_error, setpoint = 0;
-    double rcw;
 
   /** Creates a new ExampleSubsystem. */
     public DriveTrain() {
@@ -101,19 +96,6 @@ public class DriveTrain extends SubsystemBase {
         for (CANSparkMax motor: rightMotors){
             motor.setInverted(true);
         }
-    }
-
-
-    public void setSetpoint(int setpoint)
-    {
-        this.setpoint = setpoint;
-    }
-
-    public void PID(){
-        double error = setpoint - gyro.getAngle(); // Error = Target - Actual
-        this.integral += (error*.02); // Integral is increased by the error*time (which is .02 seconds using normal IterativeRobot)
-        double derivative = (error - this.previous_error) / .02;
-        this.rcw = P*error + I*this.integral + D*derivative;
     }
 
 // DriveTrain Functions
