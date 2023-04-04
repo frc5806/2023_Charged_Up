@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.AprilAutonomous;
 import frc.robot.commands.Arm.ArmToAngle;
 import frc.robot.commands.Claw.*;
 import frc.robot.commands.DriveTrain.TurnToAngle;
@@ -164,7 +165,7 @@ public class RobotContainer {
   }
 
 
-   //public Command getAutonomousCommand() {
+   public Command getAutonomousCommand() {
     //   var autoVoltageConstraint =
     //       new DifferentialDriveVoltageConstraint(
     //           new SimpleMotorFeedforward(
@@ -232,8 +233,8 @@ public class RobotContainer {
     // return     PoseEstimators.updatePoseEstimator(driveTrain); // NOT A COMMAND
 
     // return ramseteCommand();
-    
+    return new AprilAutonomous(driveTrain);
 
 
-  //}
+  }
 }
