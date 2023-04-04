@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Limelight.LimelightAutonomous;
 import frc.robot.subsystems.Limelight.PoseEstimators;
 
 public class AprilAutonomous extends PIDCommand{
@@ -24,7 +25,7 @@ public class AprilAutonomous extends PIDCommand{
             PoseEstimators::getCurrentRobotPoseY, // get current position 
             // Target output should be distance from front of apriltag
             DriveConstants.kRobotLength, 
-            output -> driveTrain.arcadeDrive(0, output, false),       
+            output -> LimelightAutonomous.gridAutonomousDrive(driveTrain, output),      
             driveTrain);
             
     }
