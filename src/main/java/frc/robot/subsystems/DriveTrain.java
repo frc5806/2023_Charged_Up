@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-
+import frc.robot.subsystems.Arm.Arm;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -214,32 +214,100 @@ public class DriveTrain extends SubsystemBase {
 
     // }
     ///////////////////////////////////////////////////////////////////////////////
+    public void stupidAutoDriveForwardOutake0(DriveTrain driveTrain, Intake intake, double speed) {
+        // run intake
+
+        while (Timer.getFPGATimestamp() < 2.5) {
+            intake.runIntake(0.8);
+        } // while loop not necessary but whatever.
+
+        // drive backwards for 2.5 seconds
+        while (Timer.getFPGATimestamp() > 2.5  && Timer.getFPGATimestamp() < 5) {
+            driveTrain.arcadeDrive(-speed, 0, false);
+        }
+        
+        // stop
+        while (Timer.getFPGATimestamp() > 5) {
+            driveTrain.safteyDrive();
+        }
+    }
+
+
     public void stupidAutoDriveForwardOutake1(DriveTrain driveTrain, Intake intake, double speed) {
-        driveTrain.safteyDrive();
-        // Forward intake
-        intake.runIntake(0.8);
 
         double currentEncoderTicksBackUp = driveTrain.getDistance();
         double backUpDistance = currentEncoderTicksBackUp * DriveConstants.kDriveTickToFeet;
-        while (backUpDistance < AutoConstants.backUpFeet) {
-            driveTrain.arcadeDrive(-speed, 0, false);
-        } 
+        
+        // driveTrain.safteyDrive();
 
-        driveTrain.safteyDrive();
-    }
+        // Forward intake
+        
+        while (Timer.getFPGATimestamp() < 2.5) {
+            intake.runIntake(0.8);
+        }
 
-    public void stupidAutoDriveForwardOutake0(DriveTrain driveTrain, Intake intake, double speed) {
-        intake.runIntake(0.8);
 
-        while (Timer.getFPGATimestamp() > 2.5  && Timer.getFPGATimestamp() < 5) {
+        while ((backUpDistance < AutoConstants.backUpFeet)) {
             driveTrain.arcadeDrive(-speed, 0, false);
         }
 
         driveTrain.safteyDrive();
     }
 
-    public Command stupidAutoDriveForwardOutake2(DriveTrain driveTrain, Intake intake, double speed){
+    // This runs stupidAuto #1
+    public Command stupidAutoDriveForwardOutake1Command(DriveTrain driveTrain, Intake intake, double speed){
         return this.runOnce(() -> this.stupidAutoDriveForwardOutake1(driveTrain, intake, speed));
+    }
+
+    public void stupidAutoArmBackwards(DriveTrain driveTrain, Intake intake, double speed) {
+        // rotate the arm
+        
+
+
+        // release the game piece
+
+
+        // drive backwards
+
+
+        // then stop
+
+
+    }
+
+    public Command stupidAutoArmBackwards(DriveTrain driveTrain, Intake intake, Double speed) {
+        return this.runOnce(() -> this.stupidAutoArmBackwards(driveTrain, intake, speed));
+    }
+
+    // make a command that just drives backwards for a certain amount of time then stops
+    public void stupidAutoDriveBackwards(DriveTrain driveTrain, Double speed) {
+
+        // THIS IS STUPID. THE TIME WILL CHANGE EVERY TIME THE FUNCTION IS RAN SO IT WON'T ACTUALLY SAVE THE START TIME
+        // ADD ON AUTO INIT OR JUST USE TIME 0
+        double startTime = Timer.getFPGATimestamp();
+
+        // find time difference 2.5 secs
+        if (Timer.getFPGATimestamp() - startTime < 2.5) {
+            driveTrain.arcadeDrive(-speed, 0, false);
+        } else {
+            driveTrain.safteyDrive();
+        }
+
+        // while (Timer.getFPGATimestamp() > 2.5  && Timer.getFPGATimestamp() < 5) {
+        //     driveTrain.arcadeDrive(-speed, 0, false);
+        // } 
+
+        // if (Timer.getFPGATimestamp() > 5) {
+        //     driveTrain.safteyDrive();
+        // }
+
+
+        // driveTrain.safteyDrive();
+
+    }
+
+    public Command stupidAutoDriveBackwardsCommand(DriveTrain driveTrain, Double speed) {
+        return this.runOnce(() -> this.stupidAutoDriveBackwards(driveTrain, speed));
     }
 
 

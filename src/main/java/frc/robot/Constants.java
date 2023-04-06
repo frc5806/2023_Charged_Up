@@ -146,5 +146,10 @@ public final class Constants {
 
     }
 
+    public static final class PneumaticsConstants {
+        public static final int kPneumaticsPortL = 1;
+        public static final int kPneumaticsPortR = 2;
+    }
+
     
 }

@@ -14,12 +14,14 @@ import frc.robot.commands.Intake.*;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Arm.Arm;
+import frc.robot.subsystems.Intake.OurPneumatics;
 import frc.robot.subsystems.Vision.Limelight;
 import frc.robot.subsystems.Vision.Limelight.LimelightData;
 import frc.robot.subsystems.Vision.Limelight.PoseEstimators;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.security.Permissions;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -54,6 +56,8 @@ public class RobotContainer {
   private final Intake intake = new Intake();
    private final Claw claw = new Claw();
    private final Arm arm = new Arm();
+
+  private final OurPneumatics pneumatic = new OurPneumatics();
  // private final ArmExtension armExtension = new ArmExtension();
 
   private final Limelight limelight = new Limelight();
@@ -107,8 +111,12 @@ public class RobotContainer {
     new JoystickButton(joystick1, 1).whileTrue(intake.runIntake(0.8));
     new JoystickButton(joystick1, 2).whileTrue(intake.runIntake(-0.8));
 
-    new JoystickButton(joystick1, 5).onTrue(new IntakeExtend(intake));
-    new JoystickButton(joystick1, 6).onTrue(new IntakeRetract(intake));
+    new JoystickButton(joystick1, 5).onTrue(pneumatic.reverseIntake());
+
+
+    // new JoystickButton(joystick1, 6).onTrue(new IntakeRetract(intake));
+
+
 
     // Button Board
     new JoystickButton(buttonBoard, 1).whileTrue(arm.rotateArm());
@@ -118,8 +126,8 @@ public class RobotContainer {
     new JoystickButton(buttonBoard, 3).whileTrue(claw.runClaw(0.2));
     new JoystickButton(buttonBoard, 4).whileTrue(claw.runClaw(-0.2)); // CHECK SIGN
 
-    new JoystickButton(buttonBoard, 5).whileTrue(intake.ajustAngle(0.2));
-    new JoystickButton(buttonBoard, 6).whileTrue(intake.ajustAngle(-0.2));
+    new JoystickButton(buttonBoard, 5).whileTrue(intake.adjustAngle(0.2));
+    new JoystickButton(buttonBoard, 6).whileTrue(intake.adjustAngle(-0.2));
 
     new JoystickButton(buttonBoard, 7).whileTrue(intake.winchIntake(0.2));
     new JoystickButton(buttonBoard, 8).whileTrue(intake.winchIntake(-0.2));
@@ -242,6 +250,8 @@ public class RobotContainer {
 
      //eturn ramseteCommand();
     // return new AprilAutonomous(driveTrain);
-    return driveTrain.stupidAutoDriveForwardOutake2(driveTrain, intake, 0.1);
+    // return driveTrain.stupidAutoDriveForwardOutake1Command(driveTrain, intake, 0.1);
+
+      return arm.rotateArm().andThen(claw.runClaw(0.2)).andThen(driveTrain.stupidAutoDriveBackwardsCommand(driveTrain, -0.2));
   }
 }

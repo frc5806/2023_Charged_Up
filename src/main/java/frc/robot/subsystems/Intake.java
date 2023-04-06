@@ -1,12 +1,18 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.PneumaticsConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
@@ -39,7 +45,7 @@ public class Intake extends SubsystemBase {
         intakeMotor2.set(pwr);
     }
 
-    public Command ajustAngle(double pwr) {
+    public Command adjustAngle(double pwr) {
         return this.startEnd(() -> this.setintakePos(pwr), () -> this.setintakePos(0));
     }
 
@@ -69,4 +75,32 @@ public class Intake extends SubsystemBase {
         // This method will be called once per scheduler run during simulation
     }
     
+    public static class OurPneumatics {
+        private Solenoid pistonIntake1;
+        private Solenoid pistonIntake2;
+        
+        public boolean intakeEnabled = false;
+
+        private static Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+
+        public OurPneumatics() {
+            pistonIntake1 = new Solenoid(0, PneumaticsModuleType.CTREPCM, PneumaticsConstants.kPneumaticsPortL);
+            pistonIntake2 = new Solenoid(0, PneumaticsModuleType.CTREPCM, PneumaticsConstants.kPneumaticsPortR);
+        }
+
+        public void changeIntakeMode() {
+            intakeEnabled = !intakeEnabled;
+            pistonIntake1.set(intakeEnabled);
+            pistonIntake2.set(intakeEnabled);
+        }
+
+        public Command reverseIntake() {
+            return Commands.runOnce(() -> changeIntakeMode());
+        }
+
+        public static void enableCompressor() {
+            compressor.enableHybrid(40, 60);
+        }
+    }
+
 }
