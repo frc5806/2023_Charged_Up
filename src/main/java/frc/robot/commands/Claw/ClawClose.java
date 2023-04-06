@@ -9,13 +9,13 @@ public class ClawClose extends PIDCommand {
     
     public ClawClose(Claw claw) {
         super(
-            new PIDController(0.2, 0.02, 0.04),
+            new PIDController(0.4, 0.02, 0.02),
             // Close loop on encoder position
             claw::getEncoderPosition,
             // Set reference to target
             ClawConstants.clawPosClose,
             // Pipe output to move claw
-            output -> claw.setPower(output),
+            output -> claw.set(output),
             // Require the claw
             claw);
     

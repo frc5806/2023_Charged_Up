@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
     private final CANSparkMax intakeMotor1;
     private final CANSparkMax intakeMotor2;
-    // private final CANSparkMax intakeMotor3;
+    private final CANSparkMax intakeMotor3;
     // private final CANSparkMax intakeMotor4;
 
     private final RelativeEncoder encoder;
@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
     public Intake() {
         intakeMotor1 = new CANSparkMax(IntakeConstants.kIntakeMotorPort1, MotorType.kBrushless);
         intakeMotor2 = new CANSparkMax(IntakeConstants.kIntakeMotorPort2, MotorType.kBrushless);
-        // intakeMotor3 = new CANSparkMax(IntakeConstants.kIntakeMotorPort3, MotorType.kBrushless);
+        intakeMotor3 = new CANSparkMax(IntakeConstants.kIntakeMotorPort3, MotorType.kBrushless);
         // intakeMotor4 = new CANSparkMax(IntakeConstants.kIntakeMotorPort4, MotorType.kBrushless);
 
         encoder = intakeMotor2.getEncoder();
@@ -33,14 +33,22 @@ public class Intake extends SubsystemBase {
 
     public void set(double pwr ) {
          intakeMotor1.set(pwr);
-        // intakeMotor2.set(pwr);
-
-        // intakeMotor3.set(pwr);
-        // intakeMotor4.set(pwr);
     }
 
     public void setintakePos(double pwr){
         intakeMotor2.set(pwr);
+    }
+
+    public Command ajustAngle(double pwr) {
+        return this.startEnd(() -> this.setintakePos(pwr), () -> this.setintakePos(0));
+    }
+
+    public void winch(double pwr){
+        intakeMotor3.set(pwr);
+    }
+
+    public Command winchIntake(double pwr) {
+        return this.startEnd(() -> this.winch(pwr), () -> this.winch(0));
     }
 
     public double getIntakeEncoderPos(){

@@ -77,6 +77,7 @@ public final class Constants {
 
     // Encoder ticks to feet
     public static final double kDriveTickToFeet = (1.0/4096) * 6 * (Math.PI/12);
+    public static final double kDriveTickToFeetToMeters = kDriveTickToFeet * 0.3048;
     // private static final double kArmTickToDegrees = 360.0 / 512 * 26 / 42 * 18 / 60 * 18 / 84;
     }
 
@@ -88,15 +89,19 @@ public final class Constants {
         // seconds
         public static final double kRamseteB = 2;
         public static final double kRamseteZeta = 0.7;
+
+        public static final double stupidEstimatedDistanceFeet = 1;
+        public static final double backUpFeet = -2;
+
     }
 
     public static final int ledPort = 8;
     public static final int ledLength = 88;
 
     public static final class IntakeConstants {
-        public static final int kIntakeMotorPort1 = 5; // 8
+        public static final int kIntakeMotorPort1 = 7; // 8
         public static final int kIntakeMotorPort2 = 11;
-        // public static final int kIntakeMotorPort3 = 10;
+         public static final int kIntakeMotorPort3 = 10;
         // public static final int kIntakeMotorPort4 = 11;
 
         public static final int intakePosClose = -7;
@@ -105,9 +110,9 @@ public final class Constants {
     }
 
     public static final class ArmConstants {
-        public static final int kArmMotorPort = 20;
-        public static final int kArmMotorPort1 = 0; // 18
-        public static final int kArmMotorPort2 = 4;
+        public static final int kArmMotorPort = 6;
+        public static final int kArmMotorPort1 = 3; // 18
+        public static final int kArmMotorPort2 = 13;
         public static final int kArmMotorPort3 = 2;
 
         public static final int countsPerRev = 42;
@@ -119,9 +124,9 @@ public final class Constants {
     }
 
     public static final class ClawConstants {
-        public static final int kClawMotorPort = 3;
+        public static final int kClawMotorPort = 5;
 
-        public static final double clawPosOpen = -2.75;
+        public static final double clawPosOpen = -1;
         public static final double clawPosClose = 1;
     }
 

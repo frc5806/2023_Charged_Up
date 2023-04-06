@@ -14,7 +14,7 @@ public class ClawPos extends PIDCommand {
             // Set reference to target
             pos,
             // Pipe output to move claw
-            output -> claw.setPower(output),
+            output -> claw.set(output),
             // Require the claw
             claw);
     

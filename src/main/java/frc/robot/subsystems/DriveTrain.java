@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -14,6 +15,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 
@@ -201,10 +203,50 @@ public class DriveTrain extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
+    // public static void autoBalance() {
+
+    //     in
+
+    // }
+
 
     // public Command followTrajectoryCommand(PathWeaverTrajectory traj, boolean isFirstPath) {
 
     // }
+    ///////////////////////////////////////////////////////////////////////////////
+    public void stupidAutoDriveForwardOutake1(DriveTrain driveTrain, Intake intake, double speed) {
+        driveTrain.safteyDrive();
+        // Forward intake
+        intake.runIntake(0.8);
+
+        double currentEncoderTicksBackUp = driveTrain.getDistance();
+        double backUpDistance = currentEncoderTicksBackUp * DriveConstants.kDriveTickToFeet;
+        while (backUpDistance < AutoConstants.backUpFeet) {
+            driveTrain.arcadeDrive(-speed, 0, false);
+        } 
+
+        driveTrain.safteyDrive();
+    }
+
+    public void stupidAutoDriveForwardOutake0(DriveTrain driveTrain, Intake intake, double speed) {
+        intake.runIntake(0.8);
+
+        while (Timer.getFPGATimestamp() > 2.5  && Timer.getFPGATimestamp() < 5) {
+            driveTrain.arcadeDrive(-speed, 0, false);
+        }
+
+        driveTrain.safteyDrive();
+    }
+
+    public Command stupidAutoDriveForwardOutake2(DriveTrain driveTrain, Intake intake, double speed){
+        return this.runOnce(() -> this.stupidAutoDriveForwardOutake1(driveTrain, intake, speed));
+    }
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void periodic() {

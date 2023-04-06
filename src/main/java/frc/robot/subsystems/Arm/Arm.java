@@ -5,7 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Constants.ArmConstants;
-
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Arm extends SubsystemBase {
@@ -44,6 +44,15 @@ public class Arm extends SubsystemBase {
         updateAngle();
     }
 
+    public Command rotateArm() {
+        double power = this.getAngle() > 103 ? 0.15 : 0.2;
+        return this.startEnd(() -> this.rotate(power), () -> this.rotate(0));
+    }
+    public Command returnArm() {
+        double power = this.getAngle() < 103 ? -0.15 : -0.2;
+        return this.startEnd(() -> this.rotate(power), () -> this.rotate(0));
+    }
+
     public void extend(double power){
         armMotorExtention.set(power);
         armExtentionPos = getEncoderExtendPos();
@@ -71,5 +80,6 @@ public class Arm extends SubsystemBase {
     public double getAngle(){
         return this.angle;
     }
+
     
 }
