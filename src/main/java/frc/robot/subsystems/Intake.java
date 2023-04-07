@@ -13,23 +13,28 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
     private final CANSparkMax intakeMotor1;
     private final CANSparkMax intakeMotor2;
-    private final CANSparkMax intakeMotor3;
+    // private final CANSparkMax intakeMotor3;
     // private final CANSparkMax intakeMotor4;
+
+
+    // public static boolean intakeEnabled = false;
+
 
     private final RelativeEncoder encoder;
     
     public Intake() {
         intakeMotor1 = new CANSparkMax(IntakeConstants.kIntakeMotorPort1, MotorType.kBrushless);
         intakeMotor2 = new CANSparkMax(IntakeConstants.kIntakeMotorPort2, MotorType.kBrushless);
-        intakeMotor3 = new CANSparkMax(IntakeConstants.kIntakeMotorPort3, MotorType.kBrushless);
+        // intakeMotor3 = new CANSparkMax(IntakeConstants.kIntakeMotorPort3, MotorType.kBrushless);
         // intakeMotor4 = new CANSparkMax(IntakeConstants.kIntakeMotorPort4, MotorType.kBrushless);
 
-        encoder = intakeMotor2.getEncoder();
+        encoder = intakeMotor1.getEncoder();
         resetEncoder();
     }
 
@@ -40,22 +45,23 @@ public class Intake extends SubsystemBase {
     public void set(double pwr ) {
          intakeMotor1.set(pwr);
     }
-
+    
+    // ???
     public void setintakePos(double pwr){
-        intakeMotor2.set(pwr);
+        intakeMotor1.set(pwr);
     }
 
     public Command adjustAngle(double pwr) {
         return this.startEnd(() -> this.setintakePos(pwr), () -> this.setintakePos(0));
     }
 
-    public void winch(double pwr){
-        intakeMotor3.set(pwr);
-    }
+    // public void winch(double pwr){
+    //     intakeMotor3.set(pwr);
+    // }
 
-    public Command winchIntake(double pwr) {
-        return this.startEnd(() -> this.winch(pwr), () -> this.winch(0));
-    }
+    // public Command winchIntake(double pwr) {
+    //     return this.startEnd(() -> this.winch(pwr), () -> this.winch(0));
+    // }
 
     public double getIntakeEncoderPos(){
         return encoder.getPosition();
@@ -75,32 +81,37 @@ public class Intake extends SubsystemBase {
         // This method will be called once per scheduler run during simulation
     }
     
-    public static class OurPneumatics {
-        private Solenoid pistonIntake1;
-        private Solenoid pistonIntake2;
+    // public static class OurPneumatics {
+    //     private Solenoid pistonIntake1;
+    //     private Solenoid pistonIntake2;
         
-        public boolean intakeEnabled = false;
+    //     private static Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
 
-        private static Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
+    //     public OurPneumatics() {
+    //         pistonIntake1 = new Solenoid(0, PneumaticsModuleType.CTREPCM, PneumaticsConstants.kPneumaticsPortL);
+    //         pistonIntake2 = new Solenoid(0, PneumaticsModuleType.CTREPCM, PneumaticsConstants.kPneumaticsPortR);
+    //     }
 
-        public OurPneumatics() {
-            pistonIntake1 = new Solenoid(0, PneumaticsModuleType.CTREPCM, PneumaticsConstants.kPneumaticsPortL);
-            pistonIntake2 = new Solenoid(0, PneumaticsModuleType.CTREPCM, PneumaticsConstants.kPneumaticsPortR);
-        }
+    //     public void changeIntakeMode() {
+    //         intakeEnabled = !intakeEnabled;
+    //         pistonIntake1.set(intakeEnabled);
+    //         pistonIntake2.set(intakeEnabled);
 
-        public void changeIntakeMode() {
-            intakeEnabled = !intakeEnabled;
-            pistonIntake1.set(intakeEnabled);
-            pistonIntake2.set(intakeEnabled);
-        }
+    //         System.out.println("ran----------------------------------------------");
+    //     }
 
-        public Command reverseIntake() {
-            return Commands.runOnce(() -> changeIntakeMode());
-        }
+    //     public Command reverseIntake() {
+    //         return Commands.runOnce(() -> changeIntakeMode());
+    //         // return this.startEnd(() -> this.changeIntakeMode(), () -> System.out.println("helake"));
+    //     }
 
-        public static void enableCompressor() {
-            compressor.enableHybrid(40, 60);
-        }
-    }
+    //     // private Command startEnd(DriveTrain driveTrain, Intake intake) {
+    //     //     return this.startEnd(() -> changeIntakeMode(), () -> System.out.println("helake"));
+    //     // }
+
+    //     public static void enableCompressor() {
+    //         compressor.enableDigital();
+    //     }
+    // }
 
 }

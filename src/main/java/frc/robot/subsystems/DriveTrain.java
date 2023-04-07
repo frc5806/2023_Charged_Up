@@ -43,6 +43,8 @@ public class DriveTrain extends SubsystemBase {
     private final AnalogPotentiometer distanceSensor;
     private final AnalogInput input1;
     private final AnalogPotentiometer distanceSensor1;
+    
+    private final Timer timer;
 
     DifferentialDriveKinematics kinematics;
     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(2.0, 0, 1.0);
@@ -88,6 +90,7 @@ public class DriveTrain extends SubsystemBase {
         distanceSensor = new AnalogPotentiometer(input, 500, -30);
         distanceSensor1 = new AnalogPotentiometer(input1, 500, -30);
 
+        timer = new Timer();
     }
 
     public void motorConfig(){
@@ -217,6 +220,7 @@ public class DriveTrain extends SubsystemBase {
     public void stupidAutoDriveForwardOutake0(DriveTrain driveTrain, Intake intake, double speed) {
         // run intake
 
+        
         while (Timer.getFPGATimestamp() < 2.5) {
             intake.runIntake(0.8);
         } // while loop not necessary but whatever.
@@ -235,23 +239,58 @@ public class DriveTrain extends SubsystemBase {
 
     public void stupidAutoDriveForwardOutake1(DriveTrain driveTrain, Intake intake, double speed) {
 
-        double currentEncoderTicksBackUp = driveTrain.getDistance();
-        double backUpDistance = currentEncoderTicksBackUp * DriveConstants.kDriveTickToFeet;
+        System.out.println("stupidAutoDriveOutake 1 started");
+        // double currentEncoderTicksBackUp = driveTrain.getDistance();
+        // double backUpDistance = currentEncoderTicksBackUp * DriveConstants.kDriveTickToFeet;
         
         // driveTrain.safteyDrive();
 
         // Forward intake
-        
-        while (Timer.getFPGATimestamp() < 2.5) {
-            intake.runIntake(0.8);
+        timer.reset();
+        while (timer.getFPGATimestamp() < 7) {
+            // intake.runIntake(0.8);
+ 
+            intake.setintakePos(speed);
+            System.out.println("Intake running");
         }
 
+        // intake.runIntake(0.8);
 
-        while ((backUpDistance < AutoConstants.backUpFeet)) {
-            driveTrain.arcadeDrive(-speed, 0, false);
+
+
+
+        // while ((backUpDistance < AutoConstants.backUpFeet)) {
+        //     System.out.print("Back up distance: ");
+        //     System.out.println(backUpDistance);
+        //     driveTrain.arcadeDrive(-speed, 0, false);
+
+        //     currentEncoderTicksBackUp = driveTrain.getDistance();
+        //     backUpDistance = currentEncoderTicksBackUp * DriveConstants.kDriveTickToFeet;
+
+        //     System.out.println("back up distance condition loop end");
+
+        // }
+
+
+            System.out.println(timer.getFPGATimestamp());
+            // Timer.getFPGATimestamp() > 7 &&  Timer.getFPGATimestamp() < 11
+        while (timer.getFPGATimestamp() > 7 &&  timer.getFPGATimestamp() < 11) {
+            driveTrain.arcadeDrive(-speed,0,false);
+            System.out.println(Timer.getFPGATimestamp());
+            System.out.println("drive");
+
+
         }
+
+        // Timer.delay(3);
+        // driveTrain.arcadeDrive(-speed,0,false);
+
+
+        // while (Timer.getFPGATimestamp() )
 
         driveTrain.safteyDrive();
+
+        System.out.println("End of autonomous stupidAutoDriveForwardOutake1");
     }
 
     // This runs stupidAuto #1
@@ -282,12 +321,12 @@ public class DriveTrain extends SubsystemBase {
     // make a command that just drives backwards for a certain amount of time then stops
     public void stupidAutoDriveBackwards(DriveTrain driveTrain, Double speed) {
 
-        // THIS IS STUPID. THE TIME WILL CHANGE EVERY TIME THE FUNCTION IS RAN SO IT WON'T ACTUALLY SAVE THE START TIME
-        // ADD ON AUTO INIT OR JUST USE TIME 0
-        double startTime = Timer.getFPGATimestamp();
+        // // THIS IS STUPID. THE TIME WILL CHANGE EVERY TIME THE FUNCTION IS RAN SO IT WON'T ACTUALLY SAVE THE START TIME
+        // // ADD ON AUTO INIT OR JUST USE TIME 0
+        // double startTime = Timer.getFPGATimestamp();
 
         // find time difference 2.5 secs
-        if (Timer.getFPGATimestamp() - startTime < 2.5) {
+        if (Timer.getFPGATimestamp()  < 2.5) {
             driveTrain.arcadeDrive(-speed, 0, false);
         } else {
             driveTrain.safteyDrive();
@@ -309,6 +348,8 @@ public class DriveTrain extends SubsystemBase {
     public Command stupidAutoDriveBackwardsCommand(DriveTrain driveTrain, Double speed) {
         return this.runOnce(() -> this.stupidAutoDriveBackwards(driveTrain, speed));
     }
+
+
 
 
 
