@@ -99,7 +99,17 @@ public class Intake extends SubsystemBase {
         }
 
         public static void enableCompressor() {
-            compressor.enableHybrid(40, 60);
+            compressor.enableHybrid(40,60); 
+
+            // Change from the factory preset to 60 psi on the pressure switch 
+            // 
+            // boolean tankFull = !compressor.getPressureSwitchValue();
+
+            // compressor.enableDigital();
+            // if (tankFull) {
+            //     compressor.disable();
+            // }
+            // compressor.getCurrent();
         }
     }
 
