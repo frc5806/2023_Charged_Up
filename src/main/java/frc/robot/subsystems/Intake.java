@@ -81,7 +81,7 @@ public class Intake extends SubsystemBase {
         
         public boolean intakeEnabled = false;
 
-        private static Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+        private static Compressor compressor = new Compressor(0, PneumaticsModuleType.CTREPCM);
 
         public OurPneumatics() {
             pistonIntake1 = new Solenoid(0, PneumaticsModuleType.CTREPCM, PneumaticsConstants.kPneumaticsPortL);
