@@ -99,9 +99,9 @@ public final class Constants {
     public static final int ledLength = 88;
 
     public static final class IntakeConstants {
-        public static final int kIntakeMotorPort1 = 7; // 8
+        public static final int kIntakeMotorPort1 = 7;
         public static final int kIntakeMotorPort2 = 11;
-         public static final int kIntakeMotorPort3 = 10;
+        //  public static final int kIntakeMotorPort3 = 10;
         // public static final int kIntakeMotorPort4 = 11;
 
         public static final int intakePosClose = -7;
